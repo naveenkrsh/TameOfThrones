@@ -1,5 +1,6 @@
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
 namespace Core.Sources
 {
     public class Kingdom 
@@ -16,6 +17,8 @@ namespace Core.Sources
         public string Animal { get; }
         int _asciiCodeOfa;
         private int[] charCountInAnimal;
+
+        private HashSet<Kingdom> Allies{get;set;}
         private void IntializeCountArr()
         {
             this.charCountInAnimal = new int[26];
@@ -71,6 +74,16 @@ namespace Core.Sources
                 }
             }
             return result;
+        }
+
+        public void AddAllie(Kingdom allie)
+        {
+            Allies.Add(allie);
+        }
+
+        public List<string> GetAllies()
+        {
+            return Allies.Select(x=>x.Name).ToList();
         }
 
         public override string ToString()
