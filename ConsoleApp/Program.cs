@@ -15,6 +15,8 @@ namespace ConsoleApp
         public static void PrintOutPut(List<string> inputs)
         {
             Universe universe = new Universe("Southeros");
+            universe.SetCurrentKingdomWantsToRule(universe["SPACE"]);
+            
             PrintRullerAndAllies(universe);
             Console.WriteLine();
             Console.WriteLine("Input Messages to kingdoms from King Shan:");
@@ -58,12 +60,15 @@ namespace ConsoleApp
 
         private static string GetAllies(Universe universe)
         {
-            return universe.GetAllies().Count >= 3 ? string.Join(",", universe.GetAllies()) : "None";
+            if (universe.GetRuller() != null)
+                return string.Join(",", universe.GetRuller().GetAllies());
+            else
+                return "None";
         }
 
         private static string GetRullerName(Universe universe)
         {
-            return universe.GetAllies().Count >= 3 ? "King Shan " : "None";
+            return universe.GetRuller() != null ? "King Shan " : "None";
         }
     }
 }

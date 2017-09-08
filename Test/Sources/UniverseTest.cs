@@ -11,38 +11,64 @@ namespace Test.Sources
         public UniverseTest()
         {
             universe = new Universe("Southeros");
+            universe.SetNoOfRequiredAlliesToRule(3);
+            universe.SetCurrentKingdomWantsToRule(universe["SPACE"]);
         }
 
         [TestMethod]
-        public void TestContainsKingDom()
+        public void Should_True_IfKingdomExitsInUniverse()
         {
-            Assert.AreEqual(true,universe.ContainsKingdom("Air"));
+            Assert.AreEqual(true, universe.ContainsKingdom("Air"));
         }
 
         [TestMethod]
-        public void TestDoesNotContainsKingDom()
+        public void Should_False_IfKingdomDoesNotExitsInUniverse()
         {
-            Assert.AreEqual(false,universe.ContainsKingdom("Aireee"));
+            Assert.AreEqual(false, universe.ContainsKingdom("Aireee"));
         }
 
 
         [TestMethod]
-        public void TestSendMessageWithCorrectMessage()
+        public void Should_Null_IfSendingMessageToOneKingDom()
         {
             //when
             universe.SendMessage("Air, “oaaawaala” ");
+
             //then
-            Assert.AreEqual(1,universe.GetAllies().Count);
-            Assert.AreEqual("AIR",universe.GetAllies()[0]);
+            Assert.IsNull(universe.GetRuller());
         }
 
         [TestMethod]
-        public void TestSendMessageWithWrongMessage()
+        public void Should_Null_IfSendingMessageToSameKingDomAsPerRequiredMajority()
         {
             //when
-            universe.SendMessage("Air, “qwertyui” ");
+            universe.SendMessage("Air, “oaaawaala” ");
+            universe.SendMessage("Air, “oaaawaala” ");
+            universe.SendMessage("Air, “oaaawaala” ");
             //then
-            Assert.AreEqual(0,universe.GetAllies().Count);
+            Assert.IsNull(universe.GetRuller());
         }
-   }
+
+        [TestMethod]
+        public void Should_Kingdom_IfSendingCorrectMessageToUniqueKingDomAsPerRequiredMajority()
+        {
+            //when
+            universe.SendMessage("Air, “oaaawaala” ");
+            universe.SendMessage("Land, “a1d22n333a4444p”");
+            universe.SendMessage("Ice, “zmzmzmzaztzozh”");
+            //then
+            Assert.IsNotNull(universe.GetRuller());
+        }
+
+        [TestMethod]
+        public void Should_Null_IfSendingWrongMessageToUniqueKingDomAsPerRequiredMajority()
+        {
+            //when
+            universe.SendMessage("Air, uytrew ");
+            universe.SendMessage("Land, “98765tr”");
+            universe.SendMessage("Ice, 76543");
+            //then
+            Assert.IsNull(universe.GetRuller());
+        }
+    }
 }
