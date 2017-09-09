@@ -11,7 +11,6 @@ namespace Core.Sources
         public string Animal { get; }
         private int[] charCountInAnimal;
         private HashSet<Kingdom> Allies { get; set; }
-
         public Kingdom(string name, string animal)
         {
             this.Name = name;
@@ -92,7 +91,7 @@ namespace Core.Sources
         {
             return this.Allies.Select(x => x.Name).ToList();
         }
-        
+
         public override string ToString()
         {
             return this.Name;

@@ -70,5 +70,25 @@ namespace Test.Sources
             //then
             Assert.IsNull(universe.GetRuller());
         }
+
+        [TestMethod]
+        public void ShouldNotConsiderItselfAsAllie_Null_IfSendingMessageToSelfKingdomAsPerRequiredMajority()
+        {
+            //when
+            universe.SetNoOfRequiredAlliesToRule(1);
+            universe.SendMessage("Space, Gorilla ");
+            //then
+            Assert.IsNull(universe.GetRuller());
+        }
+
+         [TestMethod]
+        public void Should_Kingdom_IfSendingMessageToOtherKingdomAsPerRequiredMajority()
+        {
+            //when
+            universe.SetNoOfRequiredAlliesToRule(1);
+            universe.SendMessage("Air, “oaaawaala” ");
+            //then
+            Assert.IsNotNull(universe.GetRuller());
+        }
     }
 }
