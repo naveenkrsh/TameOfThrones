@@ -19,6 +19,11 @@ namespace Core.Sources
                 this.Sender.AddAllie(this.Receiver);
             }
         }
+
+        public static BallotMessage Create(Kingdom sender,Kingdom receiver,string message)
+        {
+            return new BallotMessage(sender,receiver,message);
+        }
         public object Clone()
         {
             return this.MemberwiseClone();

@@ -95,5 +95,26 @@ namespace Test.Sources
             //then
             Assert.AreEqual(2, box.GetTotalBallotMessage());
         }
+
+        [TestMethod]
+        public void Should_MatchAndRemainOne_IfOneMessagePicked()
+        {
+            //when
+            Kingdom sender1 = new Kingdom("LAND", "Panda");
+            Kingdom receiver1 = new Kingdom("Test1", "Test1");
+            BallotMessage ballotMessage1 = new BallotMessage(sender1, receiver1, "Test1");
+
+            Kingdom sender2 = new Kingdom("LAND", "Panda");
+            Kingdom receiver2 = new Kingdom("Test2", "Test2");
+            BallotMessage ballotMessage2 = new BallotMessage(sender2, receiver2, "Test2");
+            box.Add(ballotMessage1);
+            box.Add(ballotMessage2);
+            BallotMessage pickedMessage  =box.PickMessage(0);
+
+            //then
+            Assert.AreNotEqual(pickedMessage,ballotMessage2);
+            Assert.AreEqual(pickedMessage,ballotMessage1);
+            Assert.AreEqual(1, box.GetTotalBallotMessage());
+        }
     }
 }

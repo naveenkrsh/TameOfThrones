@@ -47,7 +47,5 @@ namespace Core.Sources
             }
             return new ReadOnlyCollection<BallotMessage>(randomMessages);
         }
-
-       
     }
 }

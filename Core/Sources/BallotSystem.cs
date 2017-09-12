@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
+using System.Linq;
 namespace Core.Sources
 {
     public class BallotSystem
@@ -16,7 +16,12 @@ namespace Core.Sources
         public List<Kingdom> CompetingKingdom { get; }
         public List<Kingdom> AllKingDoms { get; }
 
-
+        public BallotMessage Add(Kingdom sender, Kingdom receiver, string message)
+        {
+            BallotMessage ballotMessage = BallotMessage.Create(sender, receiver, message);
+            ballotBox.Add(ballotMessage);
+            return ballotMessage;
+        }
         public void SendMessageToKingdom(ReadOnlyCollection<BallotMessage> ballotMessages)
         {
             foreach (var ballotMessage in ballotMessages)
@@ -24,6 +29,40 @@ namespace Core.Sources
                 ballotMessage.SendMessageToReceivingKingdom();
             }
         }
-        
+
+        // public Kingdom FindWinner()
+        // {
+        //     if (IsTie())
+        //     {
+
+        //     }
+        // }
+
+        public Kingdom FindKingdomWithMaxAllies()
+        {
+            Kingdom kingdom = (from x in CompetingKingdom
+                               group x by x.GetTotalAllies() into g
+                               select g.Max()).First();
+            return kingdom;
+        }
+
+        public bool IsTie()
+        {
+            var query = (from x in CompetingKingdom
+                         group x by x.GetTotalAllies() into g
+                         where g.Count() > 1
+                         orderby g.Key
+                         select new
+                         {
+                             g.Key
+                         }).ToList();
+            
+            
+            if (query.Count > 0)
+                return true;
+            else
+                return false;
+        }
+
     }
 }
