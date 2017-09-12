@@ -81,7 +81,7 @@ namespace Test.Sources
             Assert.IsNull(universe.GetRuller());
         }
 
-         [TestMethod]
+        [TestMethod]
         public void Should_Kingdom_IfSendingMessageToOtherKingdomAsPerRequiredMajority()
         {
             //when

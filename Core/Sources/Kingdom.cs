@@ -11,12 +11,14 @@ namespace Core.Sources
         public string Animal { get; }
         private int[] charCountInAnimal;
         private HashSet<Kingdom> Allies { get; set; }
+        public bool IsCompeting { get; set; }
         public Kingdom(string name, string animal)
         {
             this.Name = name;
             this.Animal = animal;
             this.Allies = new HashSet<Kingdom>();
             IntializeCountArr();
+            IsCompeting = false;
         }
 
         public int this[char c]
@@ -60,6 +62,9 @@ namespace Core.Sources
         }
         public bool TryToWin(string message)
         {
+            if (IsCompeting)
+                return false;
+
             bool result = true;
             int[] charCountInMessage = new int[TOTAL_NO_CHAR];
 
@@ -78,8 +83,13 @@ namespace Core.Sources
 
         public void AddAllie(Kingdom allie)
         {
-            if (this != allie)
+            if (IsEligibleToGiveAllie(allie))
                 Allies.Add(allie);
+        }
+
+        private bool IsEligibleToGiveAllie(Kingdom allie)
+        {
+            return this != allie && !allie.IsCompeting;
         }
 
         public int GetTotalAllies()

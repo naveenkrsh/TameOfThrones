@@ -5,25 +5,31 @@ using System;
 
 namespace Core.Sources
 {
-    public class Ballot
+    public class BallotBox
     {
         private IList<BallotMessage> ballotMessages;
         Random random;
-        public Ballot()
+        public BallotBox()
         {
             ballotMessages = new List<BallotMessage>();
             random = new Random();
         }
         public void Add(BallotMessage message)
         {
-            this.ballotMessages.Add(message);
+            if(!this.ballotMessages.Contains(message))
+                this.ballotMessages.Add(message);
         }
-
+        
         public BallotMessage PickMessage(int index)
         {
             BallotMessage message = (BallotMessage)ballotMessages[index].Clone();
             ballotMessages.RemoveAt(index);
             return message;
+        }
+
+        public int GetTotalBallotMessage()
+        {
+            return this.ballotMessages.Count;
         }
         private int GetRandomNumber()
         {
@@ -42,15 +48,6 @@ namespace Core.Sources
             return new ReadOnlyCollection<BallotMessage>(randomMessages);
         }
 
-        public void SendMessageToKingdom(ReadOnlyCollection<BallotMessage> ballotMessages)
-        {
-            foreach (var ballotMessage in ballotMessages)
-            {
-                if (ballotMessage.Receiver.TryToWin(ballotMessage.Message))
-                {
-                    ballotMessage.Sender.AddAllie(ballotMessage.Receiver);
-                }
-            }
-        }
+       
     }
 }

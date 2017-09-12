@@ -84,5 +84,28 @@ namespace Test.Sources
             //then
             Assert.AreEqual(1, kingdom.GetTotalAllies());
         }
+
+        [TestMethod]
+        public void Should_False_Win_IfItIsCompeting()
+        {
+            //when
+            kingdom.IsCompeting = true;
+            //then
+            Assert.AreEqual(false, kingdom.TryToWin("Panda"));
+            Assert.AreEqual(false, kingdom.TryToWin("ndapa"));
+            Assert.AreEqual(false, kingdom.TryToWin("Die or play the tame of thrones”"));
+        }
+
+        [TestMethod]
+        public void Should_Zero_Allie_IfAllieIsCompeting()
+        {
+            //when
+            Kingdom allie = new Kingdom("Test","Test");
+            allie.IsCompeting = true;
+            kingdom.AddAllie(allie);
+            //then
+            Assert.AreEqual(0, kingdom.GetTotalAllies());
+            
+        }
     }
 }

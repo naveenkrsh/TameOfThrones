@@ -43,12 +43,10 @@ namespace Core.Sources
             if (this.ContainsKingdom(splitedMessage[0]))
             {
                 Kingdom kingdom = this[splitedMessage[0]];
-                if (kingdom != currentKingdomWantsToRule)
+
+                if (kingdom.TryToWin(splitedMessage[1]))
                 {
-                    if (kingdom.TryToWin(splitedMessage[1]))
-                    {
-                        this.currentKingdomWantsToRule.AddAllie(kingdom);
-                    }
+                    this.currentKingdomWantsToRule.AddAllie(kingdom);
                 }
             }
         }
