@@ -11,26 +11,26 @@ namespace ConsoleApp
 
         static void Main(string[] args)
         {
-            kingdoms = new List<Kingdom>();
-            kingdoms.Add(new Kingdom("LAND", "Panda"));
-            kingdoms.Add(new Kingdom("WATER", "Octopus"));
-            kingdoms.Add(new Kingdom("ICE", "Mammoth"));
-            kingdoms.Add(new Kingdom("AIR", "Owl"));
-            kingdoms.Add(new Kingdom("FIRE", "Dragon"));
-            kingdoms.Add(new Kingdom("SPACE", "Gorilla"));
+            // kingdoms = new List<Kingdom>();
+            // kingdoms.Add(new Kingdom("LAND", "Panda"));
+            // kingdoms.Add(new Kingdom("WATER", "Octopus"));
+            // kingdoms.Add(new Kingdom("ICE", "Mammoth"));
+            // kingdoms.Add(new Kingdom("AIR", "Owl"));
+            // kingdoms.Add(new Kingdom("FIRE", "Dragon"));
+            // kingdoms.Add(new Kingdom("SPACE", "Gorilla"));
 
-            competing = new List<Kingdom>();
-            competing.Add(kingdoms[0]);
-            competing.Add(kingdoms[1]);
+            // competing = new List<Kingdom>();
+            // competing.Add(kingdoms[0]);
+            // competing.Add(kingdoms[1]);
 
-            ballotSystem = new BallotSystem(competing, kingdoms);
+            // ballotSystem = new BallotSystem(competing, kingdoms);
 
-            ballotSystem.Add(competing[0], kingdoms[2], "Mammoth").SendMessageToReceivingKingdom();
-            ballotSystem.Add(competing[1], kingdoms[3], "Owl").SendMessageToReceivingKingdom();
-            ballotSystem.IsTie();
-            // PrintOutPut(GetSampleInputs1());
-            // Console.WriteLine("+++++++++++++++++++++");
-            // PrintOutPut(GetSampleInputs2());
+            // ballotSystem.Add(competing[0], kingdoms[2], "Mammoth").SendMessageToReceivingKingdom();
+            // ballotSystem.Add(competing[1], kingdoms[3], "Owl").SendMessageToReceivingKingdom();
+            // ballotSystem.IsTie();
+            PrintOutPut(GetSampleInputs1());
+            Console.WriteLine("+++++++++++++++++++++");
+            PrintOutPut(GetSampleInputs2());
         }
 
         public static void PrintOutPut(List<string> inputs)

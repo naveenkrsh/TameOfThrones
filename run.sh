@@ -1,0 +1,2 @@
+cd ConsoleApp
+dotnet run

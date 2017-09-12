@@ -42,6 +42,7 @@ namespace Core.Sources
         {
             Kingdom kingdom = (from x in CompetingKingdom
                                group x by x.GetTotalAllies() into g
+                               orderby g.Key descending
                                select g.Max()).First();
             return kingdom;
         }
@@ -51,7 +52,7 @@ namespace Core.Sources
             var query = (from x in CompetingKingdom
                          group x by x.GetTotalAllies() into g
                          where g.Count() > 1
-                         orderby g.Key
+                         orderby g.Key descending
                          select new
                          {
                              g.Key
