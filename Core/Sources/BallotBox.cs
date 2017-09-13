@@ -16,10 +16,10 @@ namespace Core.Sources
         }
         public void Add(BallotMessage message)
         {
-            if(!this.ballotMessages.Contains(message))
+            if (!this.ballotMessages.Contains(message))
                 this.ballotMessages.Add(message);
         }
-        
+
         public BallotMessage PickMessage(int index)
         {
             BallotMessage message = (BallotMessage)ballotMessages[index].Clone();
@@ -37,7 +37,7 @@ namespace Core.Sources
             return index;
         }
 
-        public ReadOnlyCollection<BallotMessage> GetRandomNMessgae(int total)
+        public ReadOnlyCollection<BallotMessage> GetRandomNBallotMessgae(int total)
         {
             List<BallotMessage> randomMessages = new List<BallotMessage>();
 
@@ -46,6 +46,20 @@ namespace Core.Sources
                 randomMessages.Add(PickMessage(GetRandomNumber()));
             }
             return new ReadOnlyCollection<BallotMessage>(randomMessages);
+        }
+
+        
+        public ReadOnlyCollection<BallotMessage> GetBallotMessgae()
+        {
+            return new ReadOnlyCollection<BallotMessage>(ballotMessages);
+        } 
+
+        public void SendMessageToKingdom(ReadOnlyCollection<BallotMessage> ballotMessages)
+        {
+            foreach (var ballotMessage in ballotMessages)
+            {
+                ballotMessage.SendMessageToReceivingKingdom();
+            }
         }
     }
 }

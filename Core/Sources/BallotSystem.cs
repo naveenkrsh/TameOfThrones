@@ -13,23 +13,23 @@ namespace Core.Sources
             ballotBox = new BallotBox();
         }
 
-        public List<Kingdom> CompetingKingdom { get; }
+        private List<Kingdom> CompetingKingdom { get; set; }
         public List<Kingdom> AllKingDoms { get; }
 
-        public BallotMessage Add(Kingdom sender, Kingdom receiver, string message)
+        public int BallotMessageCount()
         {
-            BallotMessage ballotMessage = BallotMessage.Create(sender, receiver, message);
-            ballotBox.Add(ballotMessage);
-            return ballotMessage;
+            return ballotBox.GetTotalBallotMessage();
         }
-        public void SendMessageToKingdom(ReadOnlyCollection<BallotMessage> ballotMessages)
+        public void Add(Kingdom sender, Kingdom receiver, string message)
         {
-            foreach (var ballotMessage in ballotMessages)
-            {
-                ballotMessage.SendMessageToReceivingKingdom();
-            }
+            if (!CompetingKingdom.Contains(receiver))
+                ballotBox.Add(BallotMessage.Create(sender, receiver, message));
         }
 
+        public void SendMessageToKingdom()
+        {
+            ballotBox.SendMessageToKingdom(ballotBox.GetBallotMessgae());
+        }
         // public Kingdom FindWinner()
         // {
         //     if (IsTie())
@@ -40,30 +40,35 @@ namespace Core.Sources
 
         public Kingdom FindKingdomWithMaxAllies()
         {
-            Kingdom kingdom = (from x in CompetingKingdom
-                               group x by x.GetTotalAllies() into g
-                               orderby g.Key descending
-                               select g.Max()).First();
+            Kingdom kingdom = CompetingKingdom
+            .OrderByDescending(x => x.GetTotalAllies())
+            .First();
+
             return kingdom;
         }
 
         public bool IsTie()
         {
-            var query = (from x in CompetingKingdom
-                         group x by x.GetTotalAllies() into g
-                         where g.Count() > 1
-                         orderby g.Key descending
-                         select new
-                         {
-                             g.Key
-                         }).ToList();
-            
-            
-            if (query.Count > 0)
+            if (GetTiedQuery().Count() > 0)
                 return true;
             else
                 return false;
         }
+        public int CompetingKingdomCount()
+        {
+            return this.CompetingKingdom.Count();
+        }
+        public void RefreshCompetingKingdom()
+        {
+            CompetingKingdom = GetTiedQuery().OrderByDescending(x => x.Key).First().ToList();
+        }
 
+        private IEnumerable<IGrouping<int, Kingdom>> GetTiedQuery()
+        {
+            IEnumerable<IGrouping<int, Kingdom>> tiedQuery = CompetingKingdom
+           .GroupBy(x => x.GetTotalAllies())
+           .Where(x => x.Count() > 1);
+            return tiedQuery;
+        }
     }
 }

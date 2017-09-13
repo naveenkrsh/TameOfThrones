@@ -28,9 +28,14 @@ namespace ConsoleApp
             // ballotSystem.Add(competing[0], kingdoms[2], "Mammoth").SendMessageToReceivingKingdom();
             // ballotSystem.Add(competing[1], kingdoms[3], "Owl").SendMessageToReceivingKingdom();
             // ballotSystem.IsTie();
-            PrintOutPut(GetSampleInputs1());
-            Console.WriteLine("+++++++++++++++++++++");
-            PrintOutPut(GetSampleInputs2());
+            // PrintOutPut(GetSampleInputs1());
+            // Console.WriteLine("+++++++++++++++++++++");
+            // PrintOutPut(GetSampleInputs2());
+
+            IMessageSource source = new FileMessageSource("../Core/Sources/boc-messages.txt");
+
+            Console.WriteLine(source.GetAllMessages().Count);
+           
         }
 
         public static void PrintOutPut(List<string> inputs)
