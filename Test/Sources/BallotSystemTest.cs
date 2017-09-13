@@ -74,7 +74,7 @@ namespace Test.Sources
             Assert.AreEqual(2, competing[1].GetTotalAllies());
             Assert.AreEqual(false, ballotSystem.IsTie());
             Assert.AreEqual(competing[1], ballotSystem.FindKingdomWithMaxAllies());
-            Assert.AreEqual(competing[1].GetTotalAllies(), ballotSystem.FindKingdomWithMaxAllies().GetAllies());
+            Assert.AreEqual(competing[1].GetTotalAllies(), ballotSystem.FindKingdomWithMaxAllies().GetTotalAllies());
         }
 
         [TestMethod]
