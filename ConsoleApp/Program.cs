@@ -7,36 +7,35 @@ namespace ConsoleApp
     {
         public static List<Kingdom> kingdoms { get; private set; }
         public static List<Kingdom> competing { get; private set; }
-        public static BallotSystem ballotSystem { get; private set; }
+
 
         static void Main(string[] args)
         {
-            // kingdoms = new List<Kingdom>();
-            // kingdoms.Add(new Kingdom("LAND", "Panda"));
-            // kingdoms.Add(new Kingdom("WATER", "Octopus"));
-            // kingdoms.Add(new Kingdom("ICE", "Mammoth"));
-            // kingdoms.Add(new Kingdom("AIR", "Owl"));
-            // kingdoms.Add(new Kingdom("FIRE", "Dragon"));
-            // kingdoms.Add(new Kingdom("SPACE", "Gorilla"));
+            Universe universe = new Universe("Southeros");
+            PrintRullerAndAllies(universe);
 
-            // competing = new List<Kingdom>();
-            // competing.Add(kingdoms[0]);
-            // competing.Add(kingdoms[1]);
+            Console.WriteLine("Enter the kingdoms competing to be the ruler:");
+            string input = Console.ReadLine().Trim();
+            string[] kingdomsNames = input.Split(' ');
 
-            // ballotSystem = new BallotSystem(competing, kingdoms);
+            List<Kingdom> competingKingDoms = new List<Kingdom>();
 
-            // ballotSystem.Add(competing[0], kingdoms[2], "Mammoth").SendMessageToReceivingKingdom();
-            // ballotSystem.Add(competing[1], kingdoms[3], "Owl").SendMessageToReceivingKingdom();
-            // ballotSystem.IsTie();
-            PrintOutPut(GetSampleInputs1());
-            Console.WriteLine("+++++++++++++++++++++");
-            PrintOutPut(GetSampleInputs2());
+            foreach (string name in kingdomsNames)
+            {
+                string nameUpperCase = name.ToUpper();
+                if (universe.ContainsKingdom(nameUpperCase))
+                    competingKingDoms.Add(universe[nameUpperCase]);
+            }
 
-            //IMessageSource source = new FileMessageSource("../Core/Sources/boc-messages.txt");
+            RandomizeMessage rndMessage = new RandomizeMessage(new FileMessageSource("./boc-messages.txt"));
+            BallotSystem ballotSystem = new BallotSystem(competingKingDoms, universe.Kingdoms, rndMessage, 6);
 
-            //Console.WriteLine(source.GetAllMessages().Count);
-           
+            universe.SetRandomRuller(ballotSystem);
+            PrintRullerAndAllies(universe);
+
         }
+
+
 
         public static void PrintOutPut(List<string> inputs)
         {

@@ -61,5 +61,10 @@ namespace Core.Sources
                 ballotMessage.SendMessageToReceivingKingdom();
             }
         }
+
+        public void Clear()
+        {
+            ballotMessages = new List<BallotMessage>();
+        }
     }
 }

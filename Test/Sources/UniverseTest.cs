@@ -60,7 +60,7 @@ namespace Test.Sources
             universe.SendMessage("Ice, “zmzmzmzaztzozh”");
             //then
              Assert.AreEqual("SPACE",universe.GetRullerName());
-             Assert.AreEqual("AIR,ICE,LAND",universe.GetRullerAllies());
+             Assert.AreEqual("AIR,LAND,ICE",universe.GetRullerAllies());
         }
 
         [TestMethod]

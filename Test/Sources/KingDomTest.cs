@@ -85,5 +85,15 @@ namespace Test.Sources
             Assert.AreEqual(1, kingdom.GetTotalAllies());
         }
 
+        [TestMethod]
+        public void Should_zero_AfterClearingAllies()
+        {
+            //when
+            kingdom.AddAllie(new Kingdom("Test","Test"));
+            kingdom.ClearAllies();
+            //then
+            Assert.AreEqual(0, kingdom.GetTotalAllies());
+        }
+
     }
 }

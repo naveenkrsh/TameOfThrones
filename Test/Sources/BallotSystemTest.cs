@@ -37,7 +37,7 @@ namespace Test.Sources
         [TestMethod]
         public void Should_Zero_TotalBallotMessageIfReviverIsCompeting()
         {
-            ballotSystem.Add(competing[0], kingdoms[1], "Octopus"); ;
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[1], "Octopus"); ;
             Assert.AreEqual(0, ballotSystem.BallotMessageCount());
         }
 
@@ -50,8 +50,8 @@ namespace Test.Sources
         [TestMethod]
         public void Should_True_Tie()
         {
-            ballotSystem.Add(competing[0], kingdoms[3], "Owl"); ;
-            ballotSystem.Add(competing[1], kingdoms[4], "Dragon");
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "Owl"); ;
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[4], "Dragon");
             ballotSystem.SendMessageToKingdom();
 
             Assert.AreEqual(2, ballotSystem.BallotMessageCount());
@@ -64,9 +64,9 @@ namespace Test.Sources
         [TestMethod]
         public void Should_False_Tie()
         {
-            ballotSystem.Add(competing[0], kingdoms[3], "Owl");
-            ballotSystem.Add(competing[1], kingdoms[4], "Dragon");
-            ballotSystem.Add(competing[1], kingdoms[5], "Gorilla");
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "Owl");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[4], "Dragon");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[5], "Gorilla");
             ballotSystem.SendMessageToKingdom();
 
             Assert.AreEqual(3, ballotSystem.BallotMessageCount());
@@ -97,19 +97,86 @@ namespace Test.Sources
         {
             //when
             SetUpForTie();
-            if (ballotSystem.IsTie())
-                ballotSystem.RefreshCompetingKingdom();
+            ballotSystem.ReElectionSetup();
             //then        
             Assert.AreEqual(2, ballotSystem.CompetingKingdomCount());
         }
 
+        [TestMethod]
+        public void Should_Winner_AfterRepeating()
+        {
+            //when
+            SetUpForTie();
+            ballotSystem.ReElectionSetup();
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "Owl");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[4], "Dragon");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[5], "Gorilla");
+            ballotSystem.SendMessageToKingdom();
+
+            //then
+            Assert.AreEqual(3, ballotSystem.BallotMessageCount());
+            Assert.AreEqual(1, competing[0].GetTotalAllies());
+            Assert.AreEqual(2, competing[1].GetTotalAllies());
+            Assert.AreEqual(false, ballotSystem.IsTie());
+            Assert.AreEqual(competing[1], ballotSystem.FindKingdomWithMaxAllies());
+            Assert.AreEqual(competing[1].GetTotalAllies(), ballotSystem.FindKingdomWithMaxAllies().GetTotalAllies());
+
+        }
+
+        [TestMethod]
+        public void Should_RoundResults_AfterElectionRoundOne()
+        {
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "Owl");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[4], "Dragon");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[5], "Gorilla");
+            ballotSystem.SendMessageToKingdom();
+            ballotSystem.RecordRoundsResult();
+            //then
+            Assert.AreEqual(1, ballotSystem.Round);
+            Assert.AreEqual(1, ballotSystem.RoundResults.Count);
+            Assert.IsTrue(ballotSystem.RoundResults.ContainsKey("Results after round one ballot count"));
+            List<string> roundOneResult = ballotSystem.RoundResults["Results after round one ballot count"];
+
+            Assert.IsTrue(roundOneResult.Contains("Allies for LAND : 1"));
+            Assert.IsTrue(roundOneResult.Contains("Allies for WATER : 2"));
+            Assert.IsTrue(roundOneResult.Contains("Allies for ICE : 0"));
+        }
+
+        [TestMethod]
+        public void Should_RoundResults_AfterElectionRoundTwo()
+        {
+            SetUpForTie();
+            ballotSystem.RecordRoundsResult();
+            ballotSystem.ReElectionSetup();
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "Owl");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[4], "Dragon");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[5], "Gorilla");
+            ballotSystem.SendMessageToKingdom();
+            ballotSystem.RecordRoundsResult();
+            //then
+            Assert.AreEqual(2, ballotSystem.Round);
+            Assert.AreEqual(2, ballotSystem.RoundResults.Count);
+            Assert.IsTrue(ballotSystem.RoundResults.ContainsKey("Results after round one ballot count"));
+            List<string> roundOneResult = ballotSystem.RoundResults["Results after round one ballot count"];
+
+            Assert.IsTrue(roundOneResult.Contains("Allies for LAND : 2"));
+            Assert.IsTrue(roundOneResult.Contains("Allies for WATER : 2"));
+            Assert.IsTrue(roundOneResult.Contains("Allies for ICE : 1"));
+
+            Assert.IsTrue(ballotSystem.RoundResults.ContainsKey("Results after round two ballot count"));
+            List<string> roundTwoResult = ballotSystem.RoundResults["Results after round two ballot count"];
+
+            Assert.IsTrue(roundTwoResult.Contains("Allies for LAND : 1"));
+            Assert.IsTrue(roundTwoResult.Contains("Allies for WATER : 2"));
+
+        }
         private void SetUpForTie()
         {
-            ballotSystem.Add(competing[0], kingdoms[3], "Owl");
-            ballotSystem.Add(competing[1], kingdoms[3], "Owl");
-            ballotSystem.Add(competing[0], kingdoms[4], "Dragon");
-            ballotSystem.Add(competing[1], kingdoms[4], "Dragon");
-            ballotSystem.Add(competing[2], kingdoms[5], "Gorilla");
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "Owl");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[3], "Owl");
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[4], "Dragon");
+            ballotSystem.AddMessageToBallot(competing[1], kingdoms[4], "Dragon");
+            ballotSystem.AddMessageToBallot(competing[2], kingdoms[5], "Gorilla");
             ballotSystem.SendMessageToKingdom();
         }
     }

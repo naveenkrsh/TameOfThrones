@@ -6,10 +6,10 @@ namespace Core.Sources
     public class Universe
     {
         public string Name { get; }
-        private IList<Kingdom> kingdoms;
+        private List<Kingdom> kingdoms;
         private Kingdom currentKingdomWantsToRule;
         private int noOfrequiredAlliesToRule;
-        private IKingdom ruller;
+        private IKingdomInfo ruller;
         public Universe(string name)
         {
             this.Name = name;
@@ -34,6 +34,10 @@ namespace Core.Sources
             {
                 return this.kingdoms.FirstOrDefault(x => x.Name == kingdomName.ToUpper());
             }
+        }
+        public List<Kingdom> Kingdoms
+        {
+            get { return kingdoms; }
         }
         public bool ContainsKingdom(string kingdomName)
         {
@@ -76,9 +80,12 @@ namespace Core.Sources
         }
         public string GetRullerAllies()
         {
-            List<string> allies = ruller.GetAllies();
-            allies.Sort();
-            return string.Join(",", allies);
+            return string.Join(",", ruller.GetAllies());
+        }
+
+        public void SetRandomRuller(BallotSystem ballotSystem)
+        {
+            ruller = ballotSystem.FindWinnerRandomly();
         }
     }
 }

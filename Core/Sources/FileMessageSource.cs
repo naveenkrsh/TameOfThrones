@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Collections.ObjectModel;
+
 namespace Core.Sources
 {
     public class FileMessageSource : IMessageSource
     {
-        public string Path { get; set; }
+       
+        private string Path { get; }
         public FileMessageSource(string path)
         {
             this.Path = path;
         }
-
-
-        List<string> IMessageSource.GetAllMessages()
+        public ReadOnlyCollection<string> GetAllMessages()
         {
             StreamReader sr = File.OpenText(Path);
             List<string> fileContents = new List<string>();
@@ -20,7 +21,7 @@ namespace Core.Sources
             {
                 fileContents.Add(sr.ReadLine());
             }
-            return fileContents;
+            return new ReadOnlyCollection<string>(fileContents);
         }
     }
 }
