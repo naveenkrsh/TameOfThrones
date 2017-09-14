@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Core.Sources
 {
-    public class Kingdom : IEquatable<Kingdom>
+    public class Kingdom : IKingdom, IEquatable<Kingdom>
     {
         private const int TOTAL_NO_CHAR = 26;
         private const int A_AsciiCode = 97;
-        public string Name { get; }
-        public string Animal { get; }
+        private string Animal { get; }
         private int[] charCountInAnimal;
         private HashSet<Kingdom> Allies { get; set; }
+        public string Name { get; }
         public Kingdom(string name, string animal)
         {
             this.Name = name;
@@ -60,7 +60,7 @@ namespace Core.Sources
         }
         public bool TryToWin(string message)
         {
-          
+
             bool result = true;
             int[] charCountInMessage = new int[TOTAL_NO_CHAR];
 
@@ -83,6 +83,12 @@ namespace Core.Sources
                 Allies.Add(allie);
         }
 
+        void IKingdom.AddAllie(IKingdom allie)
+        {
+            if (allie is Kingdom)
+                this.AddAllie(allie as Kingdom);
+        }
+
         public int GetTotalAllies()
         {
             return this.Allies.Count;
@@ -95,7 +101,7 @@ namespace Core.Sources
 
         public override string ToString()
         {
-            return this.Name + " " +this.Animal;
+            return this.Name + " " + this.Animal;
         }
 
         public override int GetHashCode()

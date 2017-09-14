@@ -9,10 +9,12 @@ namespace Core.Sources
         private IList<Kingdom> kingdoms;
         private Kingdom currentKingdomWantsToRule;
         private int noOfrequiredAlliesToRule;
+        private IKingdom ruller;
         public Universe(string name)
         {
             this.Name = name;
             this.kingdoms = new List<Kingdom>();
+            ruller = new NullKingdom();
             noOfrequiredAlliesToRule = 3;
             Construct();
         }
@@ -49,6 +51,8 @@ namespace Core.Sources
                     this.currentKingdomWantsToRule.AddAllie(kingdom);
                 }
             }
+
+            SetNewRullerIfEligible();
         }
         public void SetCurrentKingdomWantsToRule(Kingdom kingdom)
         {
@@ -58,9 +62,23 @@ namespace Core.Sources
         {
             this.noOfrequiredAlliesToRule = no;
         }
-        public Kingdom GetRuller()
+        private void SetNewRullerIfEligible()
         {
-            return this.currentKingdomWantsToRule.GetTotalAllies() >= noOfrequiredAlliesToRule ? this.currentKingdomWantsToRule : null;
+            if (this.currentKingdomWantsToRule.GetTotalAllies() >= noOfrequiredAlliesToRule)
+            {
+                ruller = currentKingdomWantsToRule;
+            }
+        }
+        public string GetRullerName()
+        {
+
+            return ruller.Name;
+        }
+        public string GetRullerAllies()
+        {
+            List<string> allies = ruller.GetAllies();
+            allies.Sort();
+            return string.Join(",", allies);
         }
     }
 }

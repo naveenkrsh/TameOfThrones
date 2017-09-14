@@ -29,46 +29,50 @@ namespace Test.Sources
 
 
         [TestMethod]
-        public void Should_Null_IfSendingMessageToOneKingDom()
+        public void Should_None_IfSendingMessageToOneKingDom()
         {
             //when
             universe.SendMessage("Air, “oaaawaala” ");
 
             //then
-            Assert.IsNull(universe.GetRuller());
+            Assert.AreEqual("None",universe.GetRullerName());
+            Assert.AreEqual("None",universe.GetRullerAllies());
         }
 
         [TestMethod]
-        public void Should_Null_IfSendingMessageToSameKingDomAsPerRequiredMajority()
+        public void Should_None_IfSendingMessageToSameKingDomAsPerRequiredMajority()
         {
             //when
             universe.SendMessage("Air, “oaaawaala” ");
             universe.SendMessage("Air, “oaaawaala” ");
             universe.SendMessage("Air, “oaaawaala” ");
             //then
-            Assert.IsNull(universe.GetRuller());
+            Assert.AreEqual("None",universe.GetRullerName());
+            Assert.AreEqual("None",universe.GetRullerAllies());
         }
 
         [TestMethod]
-        public void Should_Kingdom_IfSendingCorrectMessageToUniqueKingDomAsPerRequiredMajority()
+        public void Should_SPACE_IfSendingCorrectMessageToUniqueKingDomAsPerRequiredMajority()
         {
             //when
             universe.SendMessage("Air, “oaaawaala” ");
             universe.SendMessage("Land, “a1d22n333a4444p”");
             universe.SendMessage("Ice, “zmzmzmzaztzozh”");
             //then
-            Assert.IsNotNull(universe.GetRuller());
+             Assert.AreEqual("SPACE",universe.GetRullerName());
+             Assert.AreEqual("AIR,ICE,LAND",universe.GetRullerAllies());
         }
 
         [TestMethod]
-        public void Should_Null_IfSendingWrongMessageToUniqueKingDomAsPerRequiredMajority()
+        public void Should_None_IfSendingWrongMessageToUniqueKingDomAsPerRequiredMajority()
         {
             //when
             universe.SendMessage("Air, uytrew ");
             universe.SendMessage("Land, “98765tr”");
             universe.SendMessage("Ice, 76543");
             //then
-            Assert.IsNull(universe.GetRuller());
+            Assert.AreEqual("None",universe.GetRullerName());
+            Assert.AreEqual("None",universe.GetRullerAllies());
         }
 
         [TestMethod]
@@ -78,17 +82,19 @@ namespace Test.Sources
             universe.SetNoOfRequiredAlliesToRule(1);
             universe.SendMessage("Space, Gorilla ");
             //then
-            Assert.IsNull(universe.GetRuller());
+            Assert.AreEqual("None",universe.GetRullerName());
+            Assert.AreEqual("None",universe.GetRullerAllies());
         }
 
         [TestMethod]
-        public void Should_Kingdom_IfSendingMessageToOtherKingdomAsPerRequiredMajority()
+        public void Should_SPACE_IfSendingMessageToOtherKingdomAsPerRequiredMajority()
         {
             //when
             universe.SetNoOfRequiredAlliesToRule(1);
             universe.SendMessage("Air, “oaaawaala” ");
             //then
-            Assert.IsNotNull(universe.GetRuller());
+            Assert.AreEqual("SPACE",universe.GetRullerName());
+            Assert.AreEqual("Air".ToLower(),universe.GetRullerAllies().ToLower());
         }
     }
 }

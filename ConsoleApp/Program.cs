@@ -28,13 +28,13 @@ namespace ConsoleApp
             // ballotSystem.Add(competing[0], kingdoms[2], "Mammoth").SendMessageToReceivingKingdom();
             // ballotSystem.Add(competing[1], kingdoms[3], "Owl").SendMessageToReceivingKingdom();
             // ballotSystem.IsTie();
-            // PrintOutPut(GetSampleInputs1());
-            // Console.WriteLine("+++++++++++++++++++++");
-            // PrintOutPut(GetSampleInputs2());
+            PrintOutPut(GetSampleInputs1());
+            Console.WriteLine("+++++++++++++++++++++");
+            PrintOutPut(GetSampleInputs2());
 
-            IMessageSource source = new FileMessageSource("../Core/Sources/boc-messages.txt");
+            //IMessageSource source = new FileMessageSource("../Core/Sources/boc-messages.txt");
 
-            Console.WriteLine(source.GetAllMessages().Count);
+            //Console.WriteLine(source.GetAllMessages().Count);
            
         }
 
@@ -79,22 +79,9 @@ namespace ConsoleApp
         public static void PrintRullerAndAllies(Universe universe)
         {
             Console.WriteLine("Who is the ruler of Southeros?");
-            Console.WriteLine("Output: {0}", GetRullerName(universe));
+            Console.WriteLine("Output: {0}", universe.GetRullerName());
             Console.WriteLine("Allies of King Shan?");
-            Console.WriteLine("Output: {0} ", GetAllies(universe));
-        }
-
-        private static string GetAllies(Universe universe)
-        {
-            if (universe.GetRuller() != null)
-                return string.Join(",", universe.GetRuller().GetAllies());
-            else
-                return "None";
-        }
-
-        private static string GetRullerName(Universe universe)
-        {
-            return universe.GetRuller() != null ? "King Shan " : "None";
+            Console.WriteLine("Output: {0} ", universe.GetRullerAllies());
         }
     }
 }
