@@ -40,19 +40,18 @@ namespace Core.Sources
         public ReadOnlyCollection<BallotMessage> GetRandomNBallotMessgae(int total)
         {
             List<BallotMessage> randomMessages = new List<BallotMessage>();
-
-            foreach (BallotMessage message in ballotMessages)
+            for (int i = 0; i < total; i++)
             {
                 randomMessages.Add(PickMessage(GetRandomNumber()));
             }
             return new ReadOnlyCollection<BallotMessage>(randomMessages);
         }
 
-        
+
         public ReadOnlyCollection<BallotMessage> GetBallotMessgae()
         {
             return new ReadOnlyCollection<BallotMessage>(ballotMessages);
-        } 
+        }
 
         public void SendMessageToKingdom(ReadOnlyCollection<BallotMessage> ballotMessages)
         {
