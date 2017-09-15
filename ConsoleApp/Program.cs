@@ -5,10 +5,6 @@ namespace ConsoleApp
 {
     class Program
     {
-        public static List<Kingdom> kingdoms { get; private set; }
-        public static List<Kingdom> competing { get; private set; }
-
-
         static void Main(string[] args)
         {
             Universe universe = new Universe("Southeros");
@@ -31,56 +27,32 @@ namespace ConsoleApp
             BallotSystem ballotSystem = new BallotSystem(competingKingDoms, universe.Kingdoms, rndMessage, 6);
 
             universe.SetRandomRuller(ballotSystem);
+            PrintRoundsResult(ballotSystem.RoundResults);
             PrintRullerAndAllies(universe);
 
         }
-
-
-
-        public static void PrintOutPut(List<string> inputs)
-        {
-            Universe universe = new Universe("Southeros");
-            universe.SetCurrentKingdomWantsToRule(universe["SPACE"]);
-
-            PrintRullerAndAllies(universe);
-            Console.WriteLine();
-            Console.WriteLine("Input Messages to kingdoms from King Shan:");
-
-            foreach (string input in inputs)
-            {
-                Console.WriteLine("Input : " + input);
-                universe.SendMessage(input);
-            }
-            Console.WriteLine();
-            PrintRullerAndAllies(universe);
-        }
-        public static List<string> GetSampleInputs1()
-        {
-            List<string> inputs = new List<string>();
-            inputs.Add("Air, “oaaawaala”");
-            inputs.Add("Land, “a1d22n333a4444p”");
-            inputs.Add("Ice, “zmzmzmzaztzozh” ");
-            return inputs;
-        }
-
-        public static List<string> GetSampleInputs2()
-        {
-            List<string> inputs = new List<string>();
-            inputs.Add("Air, “Let’s swing the sword together”");
-            inputs.Add("Land,“Die or play the tame of thrones”");
-            inputs.Add("Ice, “Ahoy! Fight for me with men and money”");
-            inputs.Add("Water, “Summer is coming”");
-            inputs.Add("Fire, “Drag on Martin!” ");
-            return inputs;
-        }
-
-
         public static void PrintRullerAndAllies(Universe universe)
         {
+            Console.WriteLine();
             Console.WriteLine("Who is the ruler of Southeros?");
             Console.WriteLine("Output: {0}", universe.GetRullerName());
             Console.WriteLine("Allies of King Shan?");
             Console.WriteLine("Output: {0} ", universe.GetRullerAllies());
+            Console.WriteLine();
+        }
+
+        public static void PrintRoundsResult(Dictionary<string, List<string>> results)
+        {
+            Console.WriteLine();
+            foreach (var round in results)
+            {
+                Console.WriteLine(round.Key);
+                foreach (var result in round.Value)
+                {
+                    Console.WriteLine(result);
+                }
+            }
+            Console.WriteLine();
         }
     }
 }
