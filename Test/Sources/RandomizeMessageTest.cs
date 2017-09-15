@@ -14,13 +14,13 @@ namespace Test.Sources
         [TestMethod]
         public void Should_Four_TotalMessage()
         {
-            Assert.AreEqual(4,rndMessage.MessageCount);
+            Assert.AreEqual(6,rndMessage.MessageCount);
         }
-        
+
         [TestMethod]
         public void Should_Hello_Message()
         {
-            Assert.AreEqual("Hello",rndMessage[0]);
+            Assert.AreEqual("Panda",rndMessage[0]);
         }
     }
 }

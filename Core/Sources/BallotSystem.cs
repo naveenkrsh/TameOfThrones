@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 namespace Core.Sources
 {
-    public class BallotSystem
+    public class BallotSystem : IRullerStrategy
     {
         private BallotBox BallotBox { get; set; }
         private List<Kingdom> CompetingKingdom { get; set; }
@@ -21,7 +21,7 @@ namespace Core.Sources
         }
         public BallotSystem(List<Kingdom> competingKingdom, List<Kingdom> allKingDoms, RandomizeMessage randomizeMessage, int pickNRandomMessage)
         {
-            CompetingKingdom = competingKingdom;
+            CompetingKingdom = competingKingdom.Distinct().ToList();
             AllKingDoms = allKingDoms.Except(CompetingKingdom).ToList();
             BallotBox = new BallotBox();
             RoundResults = new Dictionary<string, List<string>>();
@@ -33,7 +33,7 @@ namespace Core.Sources
 
         public int BallotMessageCount()
         {
-            return BallotBox.GetTotalBallotMessage();
+            return BallotBox.GetBallotMessageCount();
         }
         public void AddMessageToBallot(Kingdom sender, Kingdom receiver, string message)
         {
@@ -46,15 +46,19 @@ namespace Core.Sources
             BallotBox.SendMessageToKingdom(BallotBox.GetBallotMessgae());
         }
 
-        public Kingdom FindKingdomWithMaxAllies()
+        public Kingdom GetKingdomWithMaxAllies()
         {
             Kingdom kingdom = CompetingKingdom
-            .OrderByDescending(x => x.GetTotalAllies())
+            .OrderByDescending(x => x.GetAlliesCount())
             .First();
 
             return kingdom;
         }
 
+        public bool IsAnyAllies(Kingdom kindom)
+        {
+            return kindom.GetAlliesCount() > 0;
+        }
         public bool IsTie()
         {
             if (GetTiedQuery().Count() > 0)
@@ -69,7 +73,8 @@ namespace Core.Sources
         public void ReElectionSetup()
         {
             Round++;
-            CompetingKingdom = GetTiedQuery().OrderByDescending(x => x.Key).First().ToList();
+            if (IsTie())
+                CompetingKingdom = GetTiedQuery().OrderByDescending(x => x.Key).First().ToList();
             CompetingKingdom.ForEach(Kingdom => Kingdom.ClearAllies());
             BallotBox.Clear();
         }
@@ -77,8 +82,10 @@ namespace Core.Sources
         private IEnumerable<IGrouping<int, Kingdom>> GetTiedQuery()
         {
             IEnumerable<IGrouping<int, Kingdom>> tiedQuery = CompetingKingdom
-           .GroupBy(x => x.GetTotalAllies())
-           .Where(x => x.Count() > 1);
+            .Where(x => x.GetAlliesCount() > 0)
+            .GroupBy(x => x.GetAlliesCount())
+            .Where(x => x.Count() > 1);
+
             return tiedQuery;
         }
 
@@ -89,23 +96,29 @@ namespace Core.Sources
 
             CompetingKingdom.ForEach(Kingdom =>
             {
-                results.Add(string.Format("Allies for {0} : {1}", Kingdom.Name, Kingdom.GetTotalAllies()));
+                results.Add(string.Format("Allies for {0} : {1}", Kingdom.Name, Kingdom.GetAlliesCount()));
             });
             RoundResults.Add(round, results);
         }
 
-        public Kingdom FindWinnerRandomly()
+        public IKingdom FindWinner()
         {
+            if (CompetingKingdom.Count == 0 || AllKingDoms.Count==0)
+                return NullKingdom.Instance;
+   
             StartElection();
-            while (IsTie())
+            while (IsReElectionRequired())
             {
                 ReElectionSetup();
                 StartElection();
             }
-            
-            return FindKingdomWithMaxAllies();
+            return GetKingdomWithMaxAllies();
         }
 
+        public bool IsReElectionRequired()
+        {
+            return IsTie() || !IsAnyAllies(GetKingdomWithMaxAllies());
+        }
         private void StartElection()
         {
             AddMessageToBallotRandomly();

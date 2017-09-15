@@ -27,7 +27,7 @@ namespace Core.Sources
             return message;
         }
 
-        public int GetTotalBallotMessage()
+        public int GetBallotMessageCount()
         {
             return this.ballotMessages.Count;
         }
@@ -40,13 +40,18 @@ namespace Core.Sources
         public ReadOnlyCollection<BallotMessage> GetRandomNBallotMessgae(int total)
         {
             List<BallotMessage> randomMessages = new List<BallotMessage>();
-            for (int i = 0; i < total; i++)
+            int actualTotal =  GetActualTotal(total);
+            for (int i = 0; i < actualTotal; i++)
             {
                 randomMessages.Add(PickMessage(GetRandomNumber()));
             }
             return new ReadOnlyCollection<BallotMessage>(randomMessages);
         }
 
+        private int GetActualTotal(int total)
+        {
+            return total > ballotMessages.Count ? ballotMessages.Count : total;
+        }
 
         public ReadOnlyCollection<BallotMessage> GetBallotMessgae()
         {

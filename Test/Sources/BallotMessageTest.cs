@@ -20,7 +20,7 @@ namespace Test.Sources
             //when
             ballotMessage.SendMessageToReceivingKingdom();
             //then
-            Assert.AreEqual(1, sender.GetTotalAllies());
+            Assert.AreEqual(1, sender.GetAlliesCount());
         }
     }
 }

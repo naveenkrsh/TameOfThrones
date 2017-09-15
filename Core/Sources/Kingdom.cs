@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 namespace Core.Sources
 {
-    public class Kingdom : IKingdomInfo, IEquatable<Kingdom>
+    public class Kingdom : IKingdom, IEquatable<Kingdom>
     {
         private const int TOTAL_NO_CHAR = 26;
         private const int A_AsciiCode = 97;
@@ -82,12 +82,18 @@ namespace Core.Sources
             if (this != allie)
                 Allies.Add(allie);
         }
+
+        void IKingdom.AddAllie(IKingdom allie)
+        {
+            if (allie is Kingdom)
+                this.AddAllie(allie as Kingdom);
+        }
         public void ClearAllies()
         {
             Allies = new HashSet<Kingdom>();
         }
 
-        public int GetTotalAllies()
+        public int GetAlliesCount()
         {
             return this.Allies.Count;
         }
@@ -96,6 +102,7 @@ namespace Core.Sources
         {
             return this.Allies.Select(x => x.Name).ToList();
         }
+
 
         public override string ToString()
         {

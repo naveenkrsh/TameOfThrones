@@ -12,6 +12,7 @@ namespace ConsoleApp
 
             Console.WriteLine("Enter the kingdoms competing to be the ruler:");
             string input = Console.ReadLine().Trim();
+            Console.WriteLine();
             string[] kingdomsNames = input.Split(' ');
 
             List<Kingdom> competingKingDoms = new List<Kingdom>();
@@ -33,26 +34,26 @@ namespace ConsoleApp
         }
         public static void PrintRullerAndAllies(Universe universe)
         {
-            Console.WriteLine();
             Console.WriteLine("Who is the ruler of Southeros?");
             Console.WriteLine("Output: {0}", universe.GetRullerName());
-            Console.WriteLine("Allies of King Shan?");
+            Console.WriteLine("Allies of Ruler?");
             Console.WriteLine("Output: {0} ", universe.GetRullerAllies());
             Console.WriteLine();
         }
 
         public static void PrintRoundsResult(Dictionary<string, List<string>> results)
         {
-            Console.WriteLine();
+
             foreach (var round in results)
             {
                 Console.WriteLine(round.Key);
                 foreach (var result in round.Value)
                 {
-                    Console.WriteLine(result);
+                    Console.WriteLine("Output: " + result);
                 }
+                Console.WriteLine();
             }
-            Console.WriteLine();
+
         }
     }
 }

@@ -55,8 +55,8 @@ namespace Test.Sources
             ballotSystem.SendMessageToKingdom();
 
             Assert.AreEqual(2, ballotSystem.BallotMessageCount());
-            Assert.AreEqual(1, competing[0].GetTotalAllies());
-            Assert.AreEqual(1, competing[1].GetTotalAllies());
+            Assert.AreEqual(1, competing[0].GetAlliesCount());
+            Assert.AreEqual(1, competing[1].GetAlliesCount());
             Assert.AreEqual(true, ballotSystem.IsTie());
 
         }
@@ -70,11 +70,11 @@ namespace Test.Sources
             ballotSystem.SendMessageToKingdom();
 
             Assert.AreEqual(3, ballotSystem.BallotMessageCount());
-            Assert.AreEqual(1, competing[0].GetTotalAllies());
-            Assert.AreEqual(2, competing[1].GetTotalAllies());
+            Assert.AreEqual(1, competing[0].GetAlliesCount());
+            Assert.AreEqual(2, competing[1].GetAlliesCount());
             Assert.AreEqual(false, ballotSystem.IsTie());
-            Assert.AreEqual(competing[1], ballotSystem.FindKingdomWithMaxAllies());
-            Assert.AreEqual(competing[1].GetTotalAllies(), ballotSystem.FindKingdomWithMaxAllies().GetTotalAllies());
+            Assert.AreEqual(competing[1], ballotSystem.GetKingdomWithMaxAllies());
+            Assert.AreEqual(competing[1].GetAlliesCount(), ballotSystem.GetKingdomWithMaxAllies().GetAlliesCount());
         }
 
         [TestMethod]
@@ -84,9 +84,9 @@ namespace Test.Sources
             SetUpForTie();
             //then        
             Assert.AreEqual(5, ballotSystem.BallotMessageCount());
-            Assert.AreEqual(2, competing[0].GetTotalAllies());
-            Assert.AreEqual(2, competing[1].GetTotalAllies());
-            Assert.AreEqual(1, competing[2].GetTotalAllies());
+            Assert.AreEqual(2, competing[0].GetAlliesCount());
+            Assert.AreEqual(2, competing[1].GetAlliesCount());
+            Assert.AreEqual(1, competing[2].GetAlliesCount());
             Assert.AreEqual(true, ballotSystem.IsTie());
         }
 
@@ -115,11 +115,11 @@ namespace Test.Sources
 
             //then
             Assert.AreEqual(3, ballotSystem.BallotMessageCount());
-            Assert.AreEqual(1, competing[0].GetTotalAllies());
-            Assert.AreEqual(2, competing[1].GetTotalAllies());
+            Assert.AreEqual(1, competing[0].GetAlliesCount());
+            Assert.AreEqual(2, competing[1].GetAlliesCount());
             Assert.AreEqual(false, ballotSystem.IsTie());
-            Assert.AreEqual(competing[1], ballotSystem.FindKingdomWithMaxAllies());
-            Assert.AreEqual(competing[1].GetTotalAllies(), ballotSystem.FindKingdomWithMaxAllies().GetTotalAllies());
+            Assert.AreEqual(competing[1], ballotSystem.GetKingdomWithMaxAllies());
+            Assert.AreEqual(competing[1].GetAlliesCount(), ballotSystem.GetKingdomWithMaxAllies().GetAlliesCount());
 
         }
 
@@ -169,6 +169,35 @@ namespace Test.Sources
             Assert.IsTrue(roundTwoResult.Contains("Allies for LAND : 1"));
             Assert.IsTrue(roundTwoResult.Contains("Allies for WATER : 2"));
 
+        }
+
+        [TestMethod]
+        public void Should_True_ReElectionRequiredIfOneKingdomCompetingAndGotZeroAllies()
+        {
+            ballotSystem = new BallotSystem(new List<Kingdom>() { kingdoms[0] }, kingdoms);
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "xxxxx");
+            ballotSystem.SendMessageToKingdom();
+
+            Assert.IsTrue(ballotSystem.IsReElectionRequired());
+
+            ballotSystem.ReElectionSetup();
+            ballotSystem.AddMessageToBallot(competing[0], kingdoms[3], "Owl");
+            ballotSystem.SendMessageToKingdom();
+            Assert.AreEqual(competing[0], ballotSystem.GetKingdomWithMaxAllies());
+            Assert.AreEqual(1, ballotSystem.GetKingdomWithMaxAllies().GetAlliesCount());
+        }
+
+        [TestMethod]
+        public void Should_Kingdom_WhenTwoCompetingKingdomGetZeroAllies()
+        {
+            //when
+            ballotSystem = new BallotSystem(competing, kingdoms, new RandomizeMessage(new InMemoryMessageSource()), 6);
+            Assert.IsTrue(ballotSystem.IsReElectionRequired());
+            ballotSystem.AddMessageToBallot(competing[2], kingdoms[5], "Gorilla");
+            ballotSystem.SendMessageToKingdom();
+            //then
+            Assert.AreEqual(competing[2], ballotSystem.GetKingdomWithMaxAllies());
+            Assert.AreEqual(1, ballotSystem.GetKingdomWithMaxAllies().GetAlliesCount());
         }
         private void SetUpForTie()
         {

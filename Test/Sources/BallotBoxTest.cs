@@ -21,7 +21,7 @@ namespace Test.Sources
             box.Add(ballotMessage);
 
             //then
-            Assert.AreEqual(1, box.GetTotalBallotMessage());
+            Assert.AreEqual(1, box.GetBallotMessageCount());
         }
 
         [TestMethod]
@@ -39,7 +39,7 @@ namespace Test.Sources
             box.Add(ballotMessage2);
 
             //then
-            Assert.AreEqual(1, box.GetTotalBallotMessage());
+            Assert.AreEqual(1, box.GetBallotMessageCount());
         }
 
         [TestMethod]
@@ -57,7 +57,7 @@ namespace Test.Sources
             box.Add(ballotMessage2);
 
             //then
-            Assert.AreEqual(2, box.GetTotalBallotMessage());
+            Assert.AreEqual(2, box.GetBallotMessageCount());
         }
 
         [TestMethod]
@@ -75,7 +75,7 @@ namespace Test.Sources
             box.Add(ballotMessage2);
 
             //then
-            Assert.AreEqual(2, box.GetTotalBallotMessage());
+            Assert.AreEqual(2, box.GetBallotMessageCount());
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace Test.Sources
             box.Add(ballotMessage2);
 
             //then
-            Assert.AreEqual(2, box.GetTotalBallotMessage());
+            Assert.AreEqual(2, box.GetBallotMessageCount());
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace Test.Sources
             //then
             Assert.AreNotEqual(pickedMessage,ballotMessage2);
             Assert.AreEqual(pickedMessage,ballotMessage1);
-            Assert.AreEqual(1, box.GetTotalBallotMessage());
+            Assert.AreEqual(1, box.GetBallotMessageCount());
         }
 
         [TestMethod]
@@ -133,7 +133,7 @@ namespace Test.Sources
             box.Clear();
 
             //then
-            Assert.AreEqual(0, box.GetTotalBallotMessage());
+            Assert.AreEqual(0, box.GetBallotMessageCount());
         }
 
         [TestMethod]

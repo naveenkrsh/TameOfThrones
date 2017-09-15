@@ -8,7 +8,7 @@ namespace Test.Sources
     {
         public ReadOnlyCollection<string> GetAllMessages()
         {
-            List<string> messages = new List<string>(){"Hello","World","Geek","Trust"};
+            List<string> messages = new List<string>(){"Panda","Octopus","Mammoth","Owl","Dragon","Gorilla"};
             return new ReadOnlyCollection<string>(messages);
         }
     }

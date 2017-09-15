@@ -7,15 +7,12 @@ namespace Core.Sources
     {
         public string Name { get; }
         private List<Kingdom> kingdoms;
-        private Kingdom currentKingdomWantsToRule;
-        private int noOfrequiredAlliesToRule;
-        private IKingdomInfo ruller;
+        private IKingdom ruller;
         public Universe(string name)
         {
             this.Name = name;
             this.kingdoms = new List<Kingdom>();
-            ruller = new NullKingdom();
-            noOfrequiredAlliesToRule = 3;
+            ruller = NullKingdom.Instance;
             Construct();
         }
         private void Construct()
@@ -41,41 +38,14 @@ namespace Core.Sources
         }
         public bool ContainsKingdom(string kingdomName)
         {
-            return this[kingdomName] == null ? false : true;
+            if (this[kingdomName] != null)
+                return true;
+            else
+                return false;
         }
-        public void SendMessage(string message)
-        {
-            string[] splitedMessage = message.Split(',');
-            if (this.ContainsKingdom(splitedMessage[0]))
-            {
-                Kingdom kingdom = this[splitedMessage[0]];
 
-                if (kingdom.TryToWin(splitedMessage[1]))
-                {
-                    this.currentKingdomWantsToRule.AddAllie(kingdom);
-                }
-            }
-
-            SetNewRullerIfEligible();
-        }
-        public void SetCurrentKingdomWantsToRule(Kingdom kingdom)
-        {
-            this.currentKingdomWantsToRule = kingdom;
-        }
-        public void SetNoOfRequiredAlliesToRule(int no)
-        {
-            this.noOfrequiredAlliesToRule = no;
-        }
-        private void SetNewRullerIfEligible()
-        {
-            if (this.currentKingdomWantsToRule.GetTotalAllies() >= noOfrequiredAlliesToRule)
-            {
-                ruller = currentKingdomWantsToRule;
-            }
-        }
         public string GetRullerName()
         {
-
             return ruller.Name;
         }
         public string GetRullerAllies()
@@ -83,9 +53,9 @@ namespace Core.Sources
             return string.Join(",", ruller.GetAllies());
         }
 
-        public void SetRandomRuller(BallotSystem ballotSystem)
+        public void SetRandomRuller(IRullerStrategy ballotSystem)
         {
-            ruller = ballotSystem.FindWinnerRandomly();
+            ruller = ballotSystem.FindWinner();
         }
     }
 }

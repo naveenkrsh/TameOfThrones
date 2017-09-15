@@ -42,7 +42,7 @@ namespace Test.Sources
             //when
             kingdom.AddAllie(new Kingdom("Test","Test"));
             //then
-            Assert.AreEqual(1, kingdom.GetTotalAllies());
+            Assert.AreEqual(1, kingdom.GetAlliesCount());
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace Test.Sources
             kingdom.AddAllie(new Kingdom("Test","Test"));
             kingdom.AddAllie(new Kingdom("Test1","Test1"));
             //then
-            Assert.AreEqual(2, kingdom.GetTotalAllies());
+            Assert.AreEqual(2, kingdom.GetAlliesCount());
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace Test.Sources
             kingdom.AddAllie(temp);
             kingdom.AddAllie(temp);
             //then
-            Assert.AreEqual(1, kingdom.GetTotalAllies());
+            Assert.AreEqual(1, kingdom.GetAlliesCount());
         }
 
         [TestMethod]
@@ -72,7 +72,7 @@ namespace Test.Sources
             //when
             kingdom.AddAllie(kingdom);
             //then
-            Assert.AreEqual(0, kingdom.GetTotalAllies());
+            Assert.AreEqual(0, kingdom.GetAlliesCount());
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace Test.Sources
             kingdom.AddAllie(new Kingdom("Test","Test"));
             kingdom.AddAllie(new Kingdom("Test","Test"));
             //then
-            Assert.AreEqual(1, kingdom.GetTotalAllies());
+            Assert.AreEqual(1, kingdom.GetAlliesCount());
         }
 
         [TestMethod]
@@ -92,7 +92,7 @@ namespace Test.Sources
             kingdom.AddAllie(new Kingdom("Test","Test"));
             kingdom.ClearAllies();
             //then
-            Assert.AreEqual(0, kingdom.GetTotalAllies());
+            Assert.AreEqual(0, kingdom.GetAlliesCount());
         }
 
     }
